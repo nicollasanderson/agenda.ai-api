@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['agendaai-api.herokuapp.com', 'localhost']
 
-
+ 
 # Application definition
 
 INSTALLED_APPS = [
