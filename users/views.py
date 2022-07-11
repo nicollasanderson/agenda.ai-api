@@ -1,3 +1,4 @@
+import email
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import status
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from users.models import User
 from users.permissions import IsSuperUserPermission, IsUserOwnerPermission
-from users.serializers import LoginSerializer, UpdateUserSerializer, UserSerializer
+from users.serializers import LoginSerializer, UpdateUserSerializer, UserReturnSerializer, UserSerializer
 from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
@@ -27,10 +28,17 @@ class LoginView(APIView):
         )
 
         if user:
+            
+            user_data = {
+                'email':user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'is_professor': user.is_professor
+            }
 
             token, _ = Token.objects.get_or_create(user=user)
 
-            return Response({'token': token.key})
+            return Response({'token': token.key, 'user': user_data})
 
         return Response({"detail":"invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
 

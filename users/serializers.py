@@ -1,8 +1,13 @@
+from dataclasses import fields
 from rest_framework import serializers
 from django.utils import timezone
 
 from users.models import User
 
+class UserReturnSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','email','first_name','last_name']
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
