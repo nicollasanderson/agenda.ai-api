@@ -1,6 +1,4 @@
 from datetime import date
-from dateutil.relativedelta import relativedelta
-from django.shortcuts import render
 from rest_framework import generics
 
 from scheduling.models import Scheduling
