@@ -1,1 +1,1 @@
-web: gunicorn 'agendaai.wsgi'
+web: gunicorn agendaai.wsgi
