@@ -38,7 +38,7 @@ class SchedulingSerializer(serializers.ModelSerializer):
 
         all_schedules = Scheduling.objects.all()
 
-        err_msg = {"message": "the room is already occupied at this time"}
+        err_msg = {"message": "A sala já está ocupada nesse horário."}
 
         date_start = datetime.strptime(
             str(validated_data["scheduling_date_start"]), "%Y-%m-%d"
@@ -53,9 +53,9 @@ class SchedulingSerializer(serializers.ModelSerializer):
             if value.scheduling_date_start == validated_data["scheduling_date_start"]:
                 if value.room == validated_data["room"]:
                     if (
-                        value.scheduling_time_start
-                        == validated_data["scheduling_time_start"]
-                        or validated_data["scheduling_time_end"]
+                        validated_data["scheduling_time_end"]
+                        > value.scheduling_time_start
+                        and validated_data["scheduling_time_end"]
                         <= value.scheduling_time_end
                     ):
                         if (
@@ -66,6 +66,13 @@ class SchedulingSerializer(serializers.ModelSerializer):
                         ):
                             raise serializers.ValidationError(err_msg)
                         raise serializers.ValidationError(err_msg)
+
+        if time_end < time_start:
+            raise serializers.ValidationError(
+                {
+                    "message": "O horário de inicio do agendamento não pode ser menor que o horário de finalização."
+                }
+            )
 
         user = self.context["request"].user
 
