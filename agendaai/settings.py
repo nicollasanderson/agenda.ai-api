@@ -62,7 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://agenda-ai-kappa.vercel.app/"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://agenda-ai-kappa.vercel.app"]
 
 AUTH_USER_MODEL = "users.User"
 
