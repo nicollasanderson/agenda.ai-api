@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "rooms",
     "scheduling",
     "users",
@@ -58,6 +59,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 MIDDLEWARE = [
@@ -70,6 +72,14 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "Agenda.ai API",
+#     "DESCRIPTION": "API feita para a plataforma Agenda.ai",
+#     "VERSION": "1.0.0",
+#     "SERVE_INCLUDE_SCHEMA": False,
+#     # OTHER SETTINGS
+# }
 
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://agenda-ai-kappa.vercel.app"]
