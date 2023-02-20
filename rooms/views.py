@@ -13,7 +13,7 @@ from users.permissions import IsSuperUserPermission
 
 
 class CreateRoomView(generics.CreateAPIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserPermission]
 
     queryset = Room.objects.all()
@@ -21,19 +21,19 @@ class CreateRoomView(generics.CreateAPIView):
 
 
 class ListRoomsView(generics.ListAPIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [GetRoomPermission]
 
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
 
-class ListOneRoomView(generics.RetrieveAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [GetRoomPermission]
+# class ListOneRoomView(generics.RetrieveAPIView):
+#     authentication_classes = [TokenAuthentication]
+#     permission_classes = [GetRoomPermission]
 
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+#     queryset = Room.objects.all()
+#     serializer_class = RoomSerializer
 
 
 class ListBlockRoomView(generics.ListAPIView):
@@ -42,3 +42,11 @@ class ListBlockRoomView(generics.ListAPIView):
     def get_queryset(self):
         block = self.kwargs["blockName"]
         return Room.objects.filter(block=block)
+
+
+class RetrieveDeleteRoomView(generics.RetrieveDestroyAPIView):
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [GetRoomPermission]
+
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer

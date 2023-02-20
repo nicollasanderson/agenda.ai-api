@@ -10,7 +10,6 @@ from rest_framework.authentication import TokenAuthentication
 
 
 class CreateScheduleView(generics.CreateAPIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [ListCrateSchedulePermission]
 
     queryset = Scheduling.objects.all()
@@ -32,7 +31,7 @@ class ListScheduleView(generics.ListAPIView):
 
 
 class RetrieveDeleteScheduleView(generics.RetrieveDestroyAPIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsUserOwnerPermission]
 
     queryset = Scheduling.objects.all()
@@ -44,5 +43,14 @@ class RetrivieDateScheduleView(generics.ListAPIView):
 
     def get_queryset(self):
         date = self.kwargs["scheduling_date"]
-
+        print(self.kwargs)
         return Scheduling.objects.filter(scheduling_date_start=date)
+
+
+class RetrivieByUserScheduleView(generics.ListAPIView):
+    serializer_class = SchedulingReturnSerializer
+
+    def get_queryset(self):
+        user = self.kwargs["user_id"]
+
+        return Scheduling.objects.filter(user=user)

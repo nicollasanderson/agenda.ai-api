@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os, dotenv
 import dj_database_url
+from datetime import timedelta
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -44,12 +45,20 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     "rooms",
     "scheduling",
     "users",
     "corsheaders",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -61,6 +70,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://agenda-ai-kappa.vercel.app"]
 
@@ -90,27 +100,31 @@ WSGI_APPLICATION = "agendaai.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv("POSTGRES_DB"),
-#         "USER": os.getenv("POSTGRES_USER"),
-#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-#         "HOST": "0.0.0.0",
-#         "PORT": 5432,
-#     }
-# }
+# DESENVOLVIMENTO
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "<PGDATABASE>",
-        "USER": "<PGUSER>",
-        "PASSWORD": "<PGPASSWORD>",
-        "HOST": "<PGHOST>",
-        "PORT": "<PGPORT>",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": "0.0.0.0",
+        "PORT": 5432,
     }
 }
+
+# PRODUÇÃO
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "<PGDATABASE>",
+#         "USER": "<PGUSER>",
+#         "PASSWORD": "<PGPASSWORD>",
+#         "HOST": "<PGHOST>",
+#         "PORT": "<PGPORT>",
+#     }
+# }
 
 if DATABASE_URL:
     db_from_env = dj_database_url.config(
@@ -136,6 +150,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
